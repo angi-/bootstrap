@@ -48,6 +48,9 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
 
       //should it restrict model values to the ones selected from the popup only?
       var isEditable = originalScope.$eval(attrs.typeaheadEditable) !== false;
+      
+      //autofocus input after selection?
+      var inputAutofocus = originalScope.$eval(attrs.typeaheadAutofocus) || false;
 
       //binding to a variable that indicates if matches are being retrieved asynchronously
       var isLoadingSetter = $parse(attrs.typeaheadLoading).assign || angular.noop;
@@ -261,7 +264,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
 
         //return focus to the input element if a match was selected via a mouse click event
         // use timeout to avoid $rootScope:inprog error
-        $timeout(function() { element[0].focus(); }, 0, false);
+        if(inputAutofocus) $timeout(function() { element[0].focus(); }, 0, false);
       };
 
       //bind keyboard events: arrows up(38) / down(40), enter(13) and tab(9), esc(27)
