@@ -50,7 +50,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
       var isEditable = originalScope.$eval(attrs.typeaheadEditable) !== false;
       
       //autofocus input after selection?
-      var inputAutofocus = originalScope.$eval(attrs.typeaheadAutofocus) || false;
+      var inputAutofocus = originalScope.$eval(attrs.typeaheadAutofocus) || true;
 
       //binding to a variable that indicates if matches are being retrieved asynchronously
       var isLoadingSetter = $parse(attrs.typeaheadLoading).assign || angular.noop;
