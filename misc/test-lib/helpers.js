@@ -13,6 +13,18 @@ beforeEach(function() {
       var element = angular.element(this.actual);
       return element.hasClass('ng-hide') ||
         element.css('display') == 'none';
+    },
+    toHaveFocus: function() {
+      this.message = function() {
+        return "Expected '" + angular.mock.dump(this.actual) + "' to have focus";
+      };
+      return document.activeElement === this.actual[0];
+    },
+    toNotHaveFocus: function() {
+      this.message = function() {
+        return "Expected '" + angular.mock.dump(this.actual) + "' to not have focus";
+      };
+      return document.activeElement !== this.actual[0];
     }
   });
 });

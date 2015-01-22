@@ -373,6 +373,52 @@ describe('typeahead tests', function () {
       expect($scope.$label).toEqual('Alaska');
     });
 
+    it('should autofocus input after selection', function () {
+      var element = prepareInputEl('<div><input ng-model="result" typeahead="item for item in source | filter:$viewValue"></div>');
+      var inputEl = findInput(element);
+
+      // Note that this bug can only be found when element is in the document
+      $document.find('body').append(element);
+      // Extra teardown for this spec
+      this.after(function () { element.remove(); });
+
+      changeInputValueTo(element, 'b');
+      var match = $(findMatches(element)[0]).find('a')[0];
+
+      $(match).click();
+      $scope.$digest();
+
+      expect(inputEl.val()).toEqual('bar');
+
+      // Flush the focus $timeout
+      $timeout.flush();
+
+      expect(inputEl).toHaveFocus();
+    });
+
+    it('should not autofocus input when typeahead-autofocus is set to false', function () {
+      var element = prepareInputEl('<div><input ng-model="result" typeahead-autofocus="false" typeahead="item for item in source | filter:$viewValue"></div>');
+      var inputEl = findInput(element);
+
+      // Note that this bug can only be found when element is in the document
+      $document.find('body').append(element);
+      // Extra teardown for this spec
+      this.after(function () { element.remove(); });
+
+      changeInputValueTo(element, 'b');
+      var match = $(findMatches(element)[0]).find('a')[0];
+
+      $(match).click();
+      $scope.$digest();
+
+      expect(inputEl.val()).toEqual('bar');
+
+      // Flush the focus $timeout
+      $timeout.flush();
+
+      expect(inputEl).toNotHaveFocus();
+    });
+
     it('should correctly update inputs value on mapping where label is not derived from the model', function () {
 
       var element = prepareInputEl('<div><input ng-model="result" typeahead="state.code as state.name for state in states | filter:$viewValue"></div>');
